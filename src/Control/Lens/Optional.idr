@@ -92,6 +92,19 @@ public export
 ignored : IndexedOptional i s s a b
 ignored = ioptional' (const Nothing) const
 
+||| Construct an `Optional` that can be used to filter the focuses of another
+||| optic.
+|||
+||| To be more specific, this optic passes the value through unchanged if it
+||| satisfies the predicate and returns no values if it does not.
+|||
+||| WARNING: This `Optional` is technically invalid! Its setting capability
+||| should only be used in cases where the focuses that pass the filter aren't
+||| changed.
+public export
+filtered : (a -> Bool) -> Optional' a a
+filtered p = optional' (\x => if p x then Just x else Nothing) (const id)
+
 
 ||| Extract projection and setter functions from an optional.
 public export
@@ -121,3 +134,4 @@ withOptional l f = uncurry f (getOptional l)
 public export
 matching : Optional s t a b -> s -> Either t a
 matching = fst . getOptional
+

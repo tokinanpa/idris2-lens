@@ -62,13 +62,3 @@ public export
 ifolding : (s -> Maybe (i, a)) -> IndexedOptionalFold i s a
 ifolding f @{MkIsOptFold _} @{ind} =
   contrabimap (\x => maybe (Left x) Right (f x)) Left . right . indexed @{ind}
-
-
-||| Construct an `OptionalFold` that can be used to filter the focuses
-||| of another optic.
-|||
-||| To be more specific, this optic passes the value through unchanged if it
-||| satisfies the predicate and returns no values if it does not.
-public export
-filtered : (a -> Bool) -> OptionalFold a a
-filtered p = folding (\x => if p x then Just x else Nothing)
